@@ -1,15 +1,78 @@
-
 pipeline {
     agent any
+
+    environment {
+        // Define environment variables here if needed
+        // Example: ENVIRONMENT = 'dev'
+    }
+
     stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the source code from your repository
+                checkout scm
+            }
+        }
+
         stage('Build') {
             steps {
-                bat 'echo "Hello World!!!!!!!!!"'
-                bat '''
-                    echo "Multiline batch steps work too!!!!!!"
-                    dir
-                '''
+                // Build the project
+                sh './mvnw clean install' // For Maven-based projects
+                // sh './gradlew build' // For Gradle-based projects
+            }
+        }
+
+        stage('Test') {
+            steps {
+                // Run tests
+                sh './mvnw test' // For Maven-based projects
+                // sh './gradlew test' // For Gradle-based projects
+            }
+        }
+
+        stage('Deploy to Dev') {
+            steps {
+                // Deploy to the development environment
+                deployToEnvironment('dev')
+            }
+        }
+
+        stage('Deploy to QA') {
+            steps {
+                // Deploy to the QA environment
+                deployToEnvironment('qa')
+            }
+        }
+
+        stage('Deploy to Prod') {
+            steps {
+                // Deploy to the production environment
+                deployToEnvironment('prod')
             }
         }
     }
+
+    post {
+        always {
+            // Actions that should always be performed, e.g., cleanup
+            cleanWs()
+        }
+        success {
+            // Actions to perform on success, e.g., notifying stakeholders
+            echo 'Build and deployment were successful!'
+        }
+        failure {
+            // Actions to perform on failure, e.g., sending notifications
+            echo 'Build or deployment failed!'
+        }
+    }
+}
+
+def deployToEnvironment(env) {
+    // Implement the logic for deploying to the specified environment
+    // This might involve running a deploy script or using a deployment tool
+
+    sh "echo Deploying to ${env} environment"
+    // Example deployment script
+    // sh "./deploy.sh ${env}"
 }
