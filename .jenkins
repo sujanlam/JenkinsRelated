@@ -6,7 +6,7 @@ pipeline {
             steps {
                 bat 'echo "Hello World!!!!!!!!!"'
                 bat '''
-                    echo "Multiline batch steps work too"
+                    echo "Multiline batch steps work too!!!!!!"
                     dir
                 '''
             }
