@@ -9,61 +9,105 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                script {
+                    echo 'Checking out code from repository...'
+                }
                 // Checkout the source code from your repository
                 checkout scm
+                script {
+                    echo 'Checkout complete.'
+                }
             }
         }
 
         stage('Build') {
             steps {
+                script {
+                    echo 'Building the project...'
+                }
                 // Build the project
                 sh './mvnw clean install' // For Maven-based projects
                 // sh './gradlew build' // For Gradle-based projects
+                script {
+                    echo 'Build complete.'
+                }
             }
         }
 
         stage('Test') {
             steps {
+                script {
+                    echo 'Running tests...'
+                }
                 // Run tests
                 sh './mvnw test' // For Maven-based projects
                 // sh './gradlew test' // For Gradle-based projects
+                script {
+                    echo 'Tests completed.'
+                }
             }
         }
 
         stage('Deploy to Dev') {
             steps {
+                script {
+                    echo 'Deploying to Dev environment...'
+                }
                 // Deploy to the development environment
                 deployToEnvironment('dev')
+                script {
+                    echo 'Deployment to Dev complete.'
+                }
             }
         }
 
         stage('Deploy to QA') {
             steps {
+                script {
+                    echo 'Deploying to QA environment...'
+                }
                 // Deploy to the QA environment
                 deployToEnvironment('qa')
+                script {
+                    echo 'Deployment to QA complete.'
+                }
             }
         }
 
         stage('Deploy to Prod') {
             steps {
+                script {
+                    echo 'Deploying to Prod environment...'
+                }
                 // Deploy to the production environment
                 deployToEnvironment('prod')
+                script {
+                    echo 'Deployment to Prod complete.'
+                }
             }
         }
     }
 
     post {
         always {
+            script {
+                echo 'Cleaning up workspace...'
+            }
             // Actions that should always be performed, e.g., cleanup
             cleanWs()
+            script {
+                echo 'Workspace cleanup complete.'
+            }
         }
         success {
-            // Actions to perform on success, e.g., notifying stakeholders
-            echo 'Build and deployment were successful!'
+            script {
+                echo 'Build and deployment were successful!'
+            }
         }
         failure {
-            // Actions to perform on failure, e.g., sending notifications
-            echo 'Build or deployment failed!'
+            script {
+                echo 'Build or deployment failed!'
+            }
         }
     }
 }
