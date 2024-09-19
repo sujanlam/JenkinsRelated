@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define environment variables here if needed
-        // Example: ENVIRONMENT = 'dev'
+        ENVIRONMENT = 'dev'
     }
 
     stages {
